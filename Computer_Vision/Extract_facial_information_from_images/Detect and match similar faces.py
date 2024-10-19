@@ -14,8 +14,15 @@ from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person
 
-subscription_key = "<enter your key here>"
-endpoint = "<enter your endpoint URL here>"
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+
+credential = DefaultAzureCredential()
+secret_client = SecretClient(vault_url="https://<YourKeyVaultName>.vault.azure.net", credential=credential)
+
+subscription_key = secret_client.get_secret("SubscriptionKey").value
+endpoint = secret_client.get_secret("Endpoint").value
+
 
 # Create an authenticated FaceClient.
 face_client = FaceClient(endpoint, CognitiveServicesCredentials(subscription_key))
