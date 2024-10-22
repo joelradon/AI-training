@@ -9,14 +9,11 @@ from PIL import Image
 import sys
 import time
 
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
+from ..key_vault_helper import get_service_credentials
 
-credential = DefaultAzureCredential()
-secret_client = SecretClient(vault_url="https://<YourKeyVaultName>.vault.azure.net", credential=credential)
+# Fetch credentials for the relevant service
+subscription_key, endpoint = get_service_credentials("ComputerVision")
 
-subscription_key = secret_client.get_secret("SubscriptionKey").value
-endpoint = secret_client.get_secret("Endpoint").value
 
 
 computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))

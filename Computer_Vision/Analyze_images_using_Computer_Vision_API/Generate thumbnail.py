@@ -12,11 +12,10 @@ import time
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
-credential = DefaultAzureCredential()
-secret_client = SecretClient(vault_url="https://<YourKeyVaultName>.vault.azure.net", credential=credential)
+from ..key_vault_helper import get_service_credentials
 
-subscription_key = secret_client.get_secret("SubscriptionKey").value
-endpoint = secret_client.get_secret("Endpoint").value
+# Fetch credentials for the relevant service
+subscription_key, endpoint = get_service_credentials("ComputerVision")
 
 
 computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))
